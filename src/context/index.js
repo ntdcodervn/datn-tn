@@ -4,7 +4,7 @@ import React from "react"
 
 const initialState = {
 	isLoading: false,
-	isAuth: false,
+	isAuth: true,
 	user: null,
 }
 
