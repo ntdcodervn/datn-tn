@@ -18,7 +18,8 @@
 		"react-scripts": "^3.4.1",
 		"recharts": "^1.8.5",
 		"sweetalert2": "^9.15.2",
-		"yarn": "^1.22.10"
+		"yarn": "^1.22.10",
+		"yup": "^0.32.8"
 	},
 	"scripts": {
 		"start": "react-scripts start",

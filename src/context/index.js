@@ -1,10 +1,11 @@
 import React from "react"
+import { removeTokenLocal } from "../utils/helper"
 // import axios from 'axios';
 // import * as authAPI from './apis/auth';
 
 const initialState = {
 	isLoading: false,
-	isAuth: true,
+	isAuth: false,
 	user: null,
 }
 
@@ -23,10 +24,15 @@ export const Provider = (props) => {
 		}
 	}
 
+	const logout = () => {
+		setState((s) => ({ ...s, isAuth: false }))
+		removeTokenLocal()
+	}
+
 	if (state.isLoading) return null
 
 	return (
-		<AppContext.Provider value={{ ...state, set }}>
+		<AppContext.Provider value={{ ...state, set, logout }}>
 			{props.children}
 		</AppContext.Provider>
 	)

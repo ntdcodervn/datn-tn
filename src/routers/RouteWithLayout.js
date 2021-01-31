@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 
 const RouteWithLayout = ({ layout: Layout, component: Component, isAuth, ...rest }) => {
 
+  
+
     if (!isAuth) {
         return <Redirect to={{ pathname: '/login', state: { from: rest.location } }} />
     }

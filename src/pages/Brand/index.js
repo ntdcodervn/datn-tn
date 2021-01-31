@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { Button, Card, Col, Row, Table } from "antd"
+import { Button, Card, Col, Row, Table, Image } from "antd"
 import {
 	DeleteOutlined,
 	EditOutlined,
@@ -26,7 +26,7 @@ const columns = [
 		dataIndex: "brandImage",
 		key: "brandImage",
 		render: (url) => (
-			<img
+			<Image
 				src={url}
 				style={{ width: 50, height: 50, objectFit: "cover" }}
 			/>
@@ -84,7 +84,7 @@ const BrandPage = () => {
         }
 	}
 	return (
-		<Card title="Thương Hiệu">
+		<Card title="Quản lý thương Hiệu">
 			<Row
 				style={{
 					justifyContent: "flex-end",

@@ -1,20 +1,26 @@
 import React from "react"
 import { Layout, Dropdown, Menu, Avatar, Button } from "antd"
 import {
-	UserOutlined,
 	SettingOutlined,
 	MenuFoldOutlined,
 	MenuUnfoldOutlined,
 	LoginOutlined,
 } from "@ant-design/icons"
+import { AppContext } from "../../../context"
+
+import { useHistory } from "react-router-dom"
 
 // import { Link } from 'react-router-dom';
 // import config from '../../../constants/config';
 
 const Header = ({ isCollapsed, onToggle }) => {
+	const context = React.useContext(AppContext)
+	const history = useHistory();
 	const onMenuClick = (i) => {
 		if (i.key === "logout") {
-			// context.logout()
+			context.logout()
+		} else if (i.key === "userinfo") {
+			history.push('/user-info')
 		}
 	}
 
@@ -27,18 +33,14 @@ const Header = ({ isCollapsed, onToggle }) => {
 				<Dropdown
 					overlay={
 						<Menu selectedKeys={[]} onClick={onMenuClick}>
-							<Menu.Item key="userCenter">
-								<UserOutlined />
-								<span>Account Center</span>
-							</Menu.Item>
 							<Menu.Item key="userinfo">
 								<SettingOutlined />
-								<span>Account Settings</span>
+								<span>Thông tin người dùng</span>
 							</Menu.Item>
 							<Menu.Divider />
 							<Menu.Item key="logout">
 								<LoginOutlined />
-								<span>Logout</span>
+								<span>Đăng xuất</span>
 							</Menu.Item>
 						</Menu>
 					}

@@ -2,17 +2,56 @@ import React from "react"
 import { Layout, Menu } from "antd"
 import { Link, withRouter } from "react-router-dom"
 import config from "../../../constants/config"
-import { PieChartOutlined, UserOutlined, AppleOutlined } from "@ant-design/icons"
+import {
+	PieChartOutlined,
+	UserOutlined,
+	AppleOutlined,
+	CodeSandboxOutlined,
+	TeamOutlined,
+	SettingOutlined,
+	CreditCardOutlined,
+} from "@ant-design/icons"
 
 const { Sider } = Layout
 
 const menus = [
 	{ key: "1", name: "Bảng điều khiển", to: "/", icon: <PieChartOutlined /> },
-	{ key: "2", name: "Quản lý người dùng", to: "/users", icon: <UserOutlined /> },
-	{ key: "3", name: "Quản lý sản phẩm", to: "/product", icon: <UserOutlined /> },
-	{ key: "4", name: "Quản lý thương hiệu", to: "/brand", icon: <AppleOutlined /> },
-
-
+	{
+		key: "2",
+		name: "Quản lý người dùng",
+		to: "/users",
+		icon: <UserOutlined />,
+	},
+	{
+		key: "3",
+		name: "Quản lý sản phẩm",
+		to: "/product",
+		icon: <CodeSandboxOutlined />,
+	},
+	{
+		key: "7",
+		name: "Quản lý đơn hàng",
+		to: "/orders",
+		icon: <CreditCardOutlined />,
+	},
+	{
+		key: "4",
+		name: "Quản lý thương hiệu",
+		to: "/brand",
+		icon: <AppleOutlined />,
+	},
+	{
+		key: "5",
+		name: "Quản lý quản trị viên",
+		to: "/admins",
+		icon: <TeamOutlined />,
+	},
+	{
+		key: "6",
+		name: "Quản lý chung",
+		to: "/setting",
+		icon: <SettingOutlined />,
+	},
 ]
 
 const SiderBar = (props) => {

@@ -85,7 +85,7 @@ const onRowClick = (transaction) => {
 
 const User = (props) => {
 	return (
-		<Card title="Users" bodyStyle={{ padding: 0 }}>
+		<Card title="Quản lý người dùng" bodyStyle={{ padding: 0 }}>
 			<Table
 				columns={columns}
 				dataSource={data}
