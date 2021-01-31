@@ -18,7 +18,7 @@ axiosInstance.defaults.timeout = 20000
 
 const getTakenData = async (url, params = {}) => {
 	let token = localStorage.getItem("@token")
-	if (!token) throw new Error("Token not available!")
+	// if (!token) throw new Error("Token not available!")
 
 	try {
 		const result = await axiosInstance.get(url, {
@@ -33,7 +33,7 @@ const getTakenData = async (url, params = {}) => {
 
 const postTakenData = async (url, data) => {
 	let token = localStorage.getItem("@token")
-	if (!token) throw new Error("Token not available!")
+	// if (!token) throw new Error("Token not available!")
 
 	try {
 		const result = await axiosInstance.post(url, data, {
@@ -47,7 +47,7 @@ const postTakenData = async (url, data) => {
 
 const putTakenData = async (url, data) => {
 	let token = localStorage.getItem("@token")
-	if (!token) throw new Error("Token not available!")
+	// if (!token) throw new Error("Token not available!")
 
 	try {
 		const result = await axiosInstance.put(url, data, {
@@ -59,9 +59,9 @@ const putTakenData = async (url, data) => {
 	}
 }
 
-const deleteTakenData = async (url, data) => {
+const deleteTakenData = async (url, params) => {
 	let token = localStorage.getItem("@token")
-	if (!token) throw new Error("Token not available!")
+	// if (!token) throw new Error("Token not available!")
 
 	try {
 		const result = await axiosInstance.delete(url, {
