@@ -7,8 +7,10 @@ import { PieChartOutlined, UserOutlined } from "@ant-design/icons"
 const { Sider } = Layout
 
 const menus = [
-	{ key: "1", name: "Dashboard", to: "/", icon: <PieChartOutlined /> },
-	{ key: "2", name: "Users", to: "/users", icon: <UserOutlined /> },
+	{ key: "1", name: "Bảng điều khiển", to: "/", icon: <PieChartOutlined /> },
+	{ key: "2", name: "Quản lý người dùng", to: "/users", icon: <UserOutlined /> },
+	{ key: "3", name: "Quản lý sản phẩm", to: "/product", icon: <UserOutlined /> },
+
 ]
 
 const SiderBar = (props) => {

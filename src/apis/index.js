@@ -1,6 +1,6 @@
 import axios from "axios"
 import rateLimit from "axios-rate-limit"
-import { BASE_URL_V1 } from "../../constants/config"
+import config from "./../constants/config"
 
 axios.defaults.headers.post["Content-Type"] = "application/json"
 axios.defaults.headers.post["Accept"] = "application/json"
@@ -8,7 +8,7 @@ axios.defaults.headers.post["Accept"] = "application/json"
 // CREATE AN INSTANCE OF AXIOS
 const axiosInstance = rateLimit(
 	axios.create({
-		baseURL: BASE_URL_V1,
+		baseURL: config.BASE_URL_API,
 		timeout: 200000,
 	}),
 	{ maxRequests: 1, perMilliseconds: 1000 }
