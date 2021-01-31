@@ -7,9 +7,12 @@ import Login from "../pages/Login"
 import Dashboard from "../pages/Dashboard"
 import Users from "../pages/Users"
 import BrandPage from "../pages/Brand"
+import Product from "../pages/Product"
+
 
 const RootRouter = () => {
 	const context = React.useContext(AppContext)
+	
 
 	return (
 		<BrowserRouter>
@@ -26,6 +29,12 @@ const RootRouter = () => {
 						path="/brand"
 						layout={MainLayout}
 						component={BrandPage}
+						isAuth={context.isAuth}
+					/>
+					<RouteWithLayout
+						path="/product"
+						layout={MainLayout}
+						component={Product}
 						isAuth={context.isAuth}
 					/>
 					<RouteWithLayout
