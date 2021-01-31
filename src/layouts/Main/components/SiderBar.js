@@ -2,13 +2,14 @@ import React from "react"
 import { Layout, Menu } from "antd"
 import { Link, withRouter } from "react-router-dom"
 import config from "../../../constants/config"
-import { PieChartOutlined, UserOutlined } from "@ant-design/icons"
+import { PieChartOutlined, UserOutlined, AppleOutlined } from "@ant-design/icons"
 
 const { Sider } = Layout
 
 const menus = [
 	{ key: "1", name: "Dashboard", to: "/", icon: <PieChartOutlined /> },
 	{ key: "2", name: "Users", to: "/users", icon: <UserOutlined /> },
+	{ key: "3", name: "Thương Hiệu", to: "/brand"}
 ]
 
 const SiderBar = (props) => {
