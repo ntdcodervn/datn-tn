@@ -6,6 +6,7 @@ import MainLayout from "../layouts/Main"
 import Login from "../pages/Login"
 import Dashboard from "../pages/Dashboard"
 import Users from "../pages/Users"
+import BrandPage from "../pages/Brand"
 
 const RootRouter = () => {
 	const context = React.useContext(AppContext)
@@ -21,12 +22,18 @@ const RootRouter = () => {
 						component={Users}
 						isAuth={context.isAuth}
 					/>
+					<RouteWithLayout 
+						path="/brand"
+						layout={MainLayout}
+						component={BrandPage}
+						isAuth={context.isAuth}
+					/>
 					<RouteWithLayout
 						path="/"
 						layout={MainLayout}
 						component={Dashboard}
 						isAuth={context.isAuth}
-					/>
+					/>				
 				</Switch>
 			</div>
 		</BrowserRouter>

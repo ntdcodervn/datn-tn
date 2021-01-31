@@ -9,7 +9,7 @@ const { Sider } = Layout
 const menus = [
 	{ key: "1", name: "Dashboard", to: "/", icon: <PieChartOutlined /> },
 	{ key: "2", name: "Users", to: "/users", icon: <UserOutlined /> },
-	{ key: "3", name: "Thương Hiệu", to: "/brand"}
+	{ key: "3", name: "Thương Hiệu", to: "/brand", icon: <AppleOutlined/> },
 ]
 
 const SiderBar = (props) => {
