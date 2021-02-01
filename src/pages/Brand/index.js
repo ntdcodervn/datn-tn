@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { Button, Card, Col, Row, Table, Image } from "antd"
+import { Button, Card, Col, Input, Row, Table,Image } from "antd"
 import {
 	DeleteOutlined,
 	EditOutlined,
@@ -9,6 +9,7 @@ import {
 import brandApi from "../../apis/brand"
 import PopUpAdd from "../../layouts/Main/components/PopUpAdd"
 
+const { Search } = Input
 const columns = [
 	{
 		title: "Tên Thương Hiệu",
@@ -37,16 +38,12 @@ const columns = [
 		dataIndex: "event",
 		key: "event",
 		render: (editFunction, deleteFuntion) => (
-			<Row>
-				<Col xs={6}>
-					<Button type="primary" icon={<EditOutlined />}>
-						Sửa
-					</Button>
+			<Row style={{ display: "flex" }}>
+				<Col xs={9}>
+					<Button type="primary" icon={<EditOutlined />}></Button>
 				</Col>
-				<Col xs={6}>
-					<Button type="danger" icon={<DeleteOutlined />}>
-						Xóa
-					</Button>
+				<Col xs={9}>
+					<Button type="danger" icon={<DeleteOutlined />}></Button>
 				</Col>
 			</Row>
 		),
@@ -71,28 +68,31 @@ const BrandPage = () => {
 	}, [])
 	const getAllBrandData = async () => {
 		try {
-            setIsLoading(true);
-            const data = await brandApi.getAllBrand(15, 0)
-            setListBrands(data.data.data)
-            setIsLoading(false)
+			setIsLoading(true)
+			const data = await brandApi.getAllBrand(15, 0)
+			setListBrands(data.data.data)
+			setIsLoading(false)
 			console.log(
 				"🚀 ~ file: index.js ~ line 46 ~ getAllBrandData ~ data",
 				data.data.data
 			)
 		} catch (error) {
-            setIsLoading(false)
-        }
+			setIsLoading(false)
+		}
 	}
 	return (
 		<Card title="Quản lý thương Hiệu">
 			<Row
 				style={{
-					justifyContent: "flex-end",
+                    display: 'flex',
 					paddingInline: 20,
 					marginBottom: 20,
 				}}
 			>
-				<Col xs={2}>
+				<Col xs={6} style={{ justifyItems: "flex-start" }}>
+					<Search></Search>
+				</Col>
+				<Col xs={6} style={{ alignItems: "flex-end" }}>
 					<Button
 						type="primary"
 						onClick={showModal}
@@ -117,6 +117,7 @@ const BrandPage = () => {
 				isModalVisible={isVisible}
 				handleOk={addBrand}
 				handleCancel={hideModal}
+				refeshData={getAllBrandData}
 			/>
 		</Card>
 	)
