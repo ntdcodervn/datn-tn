@@ -1,4 +1,4 @@
-import { getTakenData } from "."
+import { getTakenData, postTakenData } from "."
 
 const getAllBrand = async (limit, page) => {
    try{
@@ -12,15 +12,25 @@ const getAllBrand = async (limit, page) => {
    }
 }
 
-const postBrands = async () =>{
+const postBrand = async (
+    brandImage,
+    brandName,
+    published,
+    slug
+) => {
     try {
-        let formData = new FormData();
-        formData.append("")
+        return await postTakenData("/v1/brands", {
+            brandImage,
+            brandName,
+            published,
+            slug
+        })
     } catch (error) {
-        
+        throw error;
     }
 }
 
 export default {
-    getAllBrand
+    getAllBrand,
+    postBrand,
 }

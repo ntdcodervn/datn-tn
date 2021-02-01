@@ -2,6 +2,8 @@ import { CloudUploadOutlined } from "@ant-design/icons"
 import { Col, Row, Input, Modal, Image, Button, Form, message } from "antd"
 import React, { useRef, useState } from "react"
 import { upLoadImg } from "../../../apis/upLoadImg"
+import brandApi from "../../../apis/brand"
+
 
 const layout = {
 	labelCol: { span: 8 },
@@ -11,7 +13,7 @@ const tailLayout = {
 	wrapperCol: { offset: 8, span: 16 },
 }
 
-function PopUpAdd({ isModalVisible, handleOk, handleCancel }) {
+function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
 	const [file, setFile] = useState()
 	const [name, setName] = useState({
 		error: "",
@@ -41,10 +43,15 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel }) {
 				fileTemp.type == "image/jpg"
 			) {
 				console.log(fileTemp)
-				setFile(fileTemp)
 				try {
 					let imageData = await upLoadImg(fileTemp)
+                    console.log("🚀 ~ file: PopUpAdd.js ~ line 49 ~ onChangeFile ~ imageData", imageData)
+                    setImage({
+                        ...image,
+                        value : imageData.data.message
+                    })
 				} catch (error) {
+                    console.log(error)
 					message.error("Không thể tải ảnh lên")
 				}
 			} else {
@@ -54,7 +61,7 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel }) {
 			message.error("Có lỗi xảy ra khi chọn File, vui lòng thử lại")
 		}
 	}
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		if (!name.value) {
 			setName({
 				...name,
@@ -66,7 +73,22 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel }) {
 				error: "Vui lòng nhập đường dẫn",
 			})
 		} else if (!image.value) {
+            console.log("🚀 ~ file: PopUpAdd.js ~ line 72 ~ onSubmit ~ image.value", image.value)
 			message.error("Vui lòng chọn ảnh tải lên")
+		}
+		try {
+			let brandData = await brandApi.postBrand(
+                image.value,
+                name.value,
+                true,
+                "/"+slug.value
+            )
+            message.success("Thêm thành công")
+            refeshData();
+            handleCancel();
+            console.log("🚀 ~ file: PopUpAdd.js ~ line 75 ~ onSubmit ~ brandData", brandData)
+		} catch (error) {
+			message.error("Không thêm thương hiệu được", error)
 		}
 	}
 
@@ -84,7 +106,7 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel }) {
 					<Image
 						width={100}
 						height={100}
-						src={file ? URL.createObjectURL(file) : null}
+						src={image.value ? image.value : null}
 					/>
 				</Col>
 				<Col
