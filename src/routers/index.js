@@ -63,12 +63,6 @@ const RootRouter = () => {
 						isAuth={context.isAuth}
 					/>
 					<RouteWithLayout
-						path="/admins"
-						layout={MainLayout}
-						component={Admins}
-						isAuth={context.isAuth}
-					/>
-					<RouteWithLayout
 						path="/users"
 						layout={MainLayout}
 						component={User}

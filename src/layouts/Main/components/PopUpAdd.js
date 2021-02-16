@@ -10,8 +10,7 @@ const layout = {
 	wrapperCol: { span: 16 },
 }
 
-function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
-	const [file, setFile] = useState()
+function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {	
 	const [name, setName] = useState({
 		error: "",
 		value: "",

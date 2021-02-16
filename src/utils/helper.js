@@ -1,11 +1,11 @@
 export const setAuthLocal = (token) => {
-	localStorage.setItem("@token", JSON.stringify(token))
+	localStorage.setItem("@token", token)
 }
 
 export const getAuthLocal = () => {
 	let token = localStorage.getItem("@token")
 	if (token) {
-		return JSON.parse(token)
+		return token
 	}
 	return null
 }

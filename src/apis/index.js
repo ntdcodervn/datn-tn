@@ -51,7 +51,7 @@ const putTakenData = async (url, data) => {
 
 	try {
 		const result = await axiosInstance.put(url, data, {
-			headers: { Authorization: "Bearer " + token },
+			headers: { Authorization: `Bearer ${token}` },
 		})
 		return result
 	} catch (e) {

@@ -10,6 +10,7 @@ import {
 	Image,
 	message,
 	Popconfirm,
+	Pagination,
 } from "antd"
 import {
 	DeleteOutlined,
@@ -25,23 +26,36 @@ const { Search } = Input
 
 const BrandPage = () => {
 	const [listBrands, setListBrands] = useState([])
+	const [listBrandOrigin, setListBrandOrigin] = useState([])
 	const [isVisible, setIsVisible] = useState(false)
 	const [isVisibleModalEdit, setIsVisibleModalEdit] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
+	const [page, setPage] = useState(1)
+	const [totalItems, setTotalItems] = useState(0)
+	const [brandItem, setBrandItem] = useState({
+		id: 0,
+		brandName: "",
+		slug: "",
+		brandImage: "",
+		published: false,
+	})
+
+	useEffect(() => {
+		getAllBrandData()
+	}, [page])
+
 	const handleDelete = (key) => {
 		setListBrands(listBrands.filter((item) => item.id !== key))
 	}
-	const handleUpdate = (key) => {
+	const handleUpdate = (item) => {
 		setIsVisibleModalEdit(true)
-		render(
-			<PopUpEdit
-				isModalVisible={isVisibleModalEdit}
-				handleOk={editBrand}
-				handleCancel={hideModal}
-				refeshData={getAllBrandData}
-				id={key}
-			/>
-		)
+		setBrandItem({
+			id: item.id,
+			brandName: item.brandName,
+			slug: item.slug,
+			brandImage: item.brandImage,
+			published: item.published,
+		})
 	}
 	const columns = [
 		{
@@ -77,12 +91,16 @@ const BrandPage = () => {
 			dataIndex: "event",
 			key: "event",
 			render: (_, record) => {
+				console.log(
+					"🚀 ~ file: index.js ~ line 82 ~ BrandPage ~ record",
+					record
+				)
 				return (
 					<Row style={{ display: "flex" }}>
 						<Col xs={9}>
 							<Button
 								type="primary"
-								onClick={() => handleUpdate(record.id)}
+								onClick={() => handleUpdate(record)}
 								icon={<EditOutlined />}
 							></Button>
 						</Col>
@@ -121,8 +139,10 @@ const BrandPage = () => {
 	const getAllBrandData = async () => {
 		try {
 			setIsLoading(true)
-			const data = await brandApi.getAllBrand(15, 0)
+			const data = await brandApi.getAllBrand(5, page - 1)
 			setListBrands(data.data.data)
+			setListBrandOrigin(data.data.data)
+			setTotalItems(data.data.totalItems)
 			setIsLoading(false)
 		} catch (error) {
 			setIsLoading(false)
@@ -150,6 +170,19 @@ const BrandPage = () => {
 			message.error("Xóa thất bại, vui lòng thử lại")
 		}
 	}
+	const searchItem = (keyWord) => {
+		console.log(
+			"🚀 ~ file: index.js ~ line 165 ~ searchItem ~ keyWord",
+			keyWord
+		)
+		console.log("list brand origin", listBrandOrigin)
+		setListBrands(
+			listBrandOrigin.filter((item) => {
+				const string = item.brandName + item.slug + item.id
+				return string.indexOf(keyWord) !== -1
+			})
+		)
+	}
 
 	return (
 		<Card title="Quản lý thương Hiệu">
@@ -161,7 +194,9 @@ const BrandPage = () => {
 				}}
 			>
 				<Col xs={6} style={{ justifyItems: "flex-start" }}>
-					<Search></Search>
+					<Search
+						onChange={(event) => searchItem(event.target.value)}
+					></Search>
 				</Col>
 				<Col xs={6} style={{ alignItems: "flex-end" }}>
 					<Button
@@ -177,12 +212,18 @@ const BrandPage = () => {
 				columns={columns}
 				dataSource={listBrands}
 				loading={isLoading}
-				pagination={{
-					style: { padding: "0 24px" },
-					total: 20,
-					pageSize: 10,
-				}}
+				pagination={false}
 			/>
+			{totalItems ? (
+				<Pagination
+					defaultCurrent={1}
+					total={totalItems}
+					pageSize={5}
+					onChange={(page, pageSize) => {
+						setPage(page)
+					}}
+				/>
+			) : null}
 			<PopUpAdd
 				isModalVisible={isVisible}
 				handleOk={addBrand}
@@ -194,7 +235,7 @@ const BrandPage = () => {
 				handleOk={editBrand}
 				handleCancel={hideModal}
 				refeshData={getAllBrandData}
-				// id={id}
+				brandItem={brandItem}
 			/>
 		</Card>
 	)

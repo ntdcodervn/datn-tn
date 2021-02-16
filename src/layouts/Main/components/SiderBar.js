@@ -41,12 +41,6 @@ const menus = [
 		icon: <AppleOutlined />,
 	},
 	{
-		key: "5",
-		name: "Quản lý quản trị viên",
-		to: "/admins",
-		icon: <TeamOutlined />,
-	},
-	{
 		key: "6",
 		name: "Quản lý chung",
 		to: "/setting",

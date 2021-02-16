@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { upLoadImg } from "../../../apis/upLoadImg"
 import brandApi from "../../../apis/brand"
 import { Button, Col, Image, Input, message, Row, Modal, Form } from "antd"
@@ -8,10 +8,16 @@ const layout = {
 	labelCol: { span: 8 },
 	wrapperCol: { span: 16 },
 }
-function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
-	console.log("🚀 ~ file: PopUpEdit.js ~ line 14 ~ PopUpEdit ~ id", id)
-	const data = brandApi.getAllBrand(`/${id}`)
-    console.log("🚀 ~ file: PopUpEdit.js ~ line 14 ~ PopUpEdit ~ data", data)
+function PopUpEdit({
+	isModalVisible,
+	handleOk,
+	handleCancel,
+	refeshData,
+	brandItem,
+}) {
+	const [id, setId] = useState({
+		value: "",
+	})
 	const [name, setName] = useState({
 		error: "",
 		value: "",
@@ -25,9 +31,36 @@ function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
 		error: "",
 	})
 	const [isLoadingUpLoad, setIsLoadingUpLoad] = useState(false)
-	const fileRef = useRef()
+
+	useEffect(() => {
+		console.log(
+			"🚀 ~ file: PopUpEdit.js ~ line 12 ~ PopUpEdit ~ brandItem",
+			brandItem
+		)
+		setId({
+			value: brandItem.id,
+		})
+		setName({
+			...name,
+			value: brandItem.brandName,
+		})
+		setSlug({
+			...slug,
+			value: brandItem.slug,
+		})
+		setImage({
+			...image,
+			value: brandItem.brandImage,
+		})
+	}, [brandItem])
+
+	const fileRefEdit = useRef()
 	const chooseFile = () => {
-		fileRef.current.click()
+		// fileRef.current.click()
+		console.log(
+			"🚀 ~ file: PopUpEdit.js ~ line 64 ~ chooseFile ~ fileRef",
+			fileRefEdit.current.click()
+		)
 	}
 	const onChangeFile = async (event) => {
 		let fileTemp = event.target.files[0]
@@ -65,15 +98,16 @@ function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
 			message.error("Vui lòng tải ảnh lên")
 		}
 		try {
-			// let brandData = await brandApi.updateBrand(
-			// 	image.value,
-			// 	name.value,
-			// 	true,
-			// 	"/" + slug.value
-			// )
+			let brandData = await brandApi.updateBrand(
+				id.value,
+				image.value,
+				name.value,
+				true,
+				slug.value
+			)
 			message.success("Cập nhật thương hiệu thành công")
-			// refeshData()
-			// handleCancel()
+			refeshData()
+			handleCancel()
 		} catch (error) {
 			message.error("Cập nhật không thành công")
 		}
@@ -120,6 +154,7 @@ function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
 				>
 					<Input
 						placeholder="Nhập tên thương hiệu"
+						value={name.value}
 						onChange={(event) =>
 							setName({
 								value: event.target.value,
@@ -136,6 +171,7 @@ function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
 				>
 					<Input
 						placeholder="Nhập đường dẫn"
+						value={slug.value}
 						onChange={(event) =>
 							setSlug({
 								value: event.target.value,
@@ -145,10 +181,10 @@ function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
 					/>
 				</Form.Item>
 
-				<Input
-					id="myInput"
+				<input
+					id="myInputEdit"
 					type="file"
-					ref={fileRef}
+					ref={fileRefEdit}
 					style={{ display: "none" }}
 					onChange={onChangeFile}
 				/>
