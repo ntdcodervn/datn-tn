@@ -1,17 +1,17 @@
-import { CloudUploadOutlined } from "@ant-design/icons"
-import { Col, Row, Input, Modal, Image, Button, Form, message } from "antd"
 import React, { useRef, useState } from "react"
 import { upLoadImg } from "../../../apis/upLoadImg"
 import brandApi from "../../../apis/brand"
-
+import { Button, Col, Image, Input, message, Row, Modal, Form } from "antd"
+import { CloudUploadOutlined } from "@ant-design/icons"
 
 const layout = {
 	labelCol: { span: 8 },
 	wrapperCol: { span: 16 },
 }
-
-function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
-	const [file, setFile] = useState()
+function PopUpEdit({ isModalVisible, handleOk, handleCancel, refeshData, id }) {
+	console.log("🚀 ~ file: PopUpEdit.js ~ line 14 ~ PopUpEdit ~ id", id)
+	const data = brandApi.getAllBrand(`/${id}`)
+    console.log("🚀 ~ file: PopUpEdit.js ~ line 14 ~ PopUpEdit ~ data", data)
 	const [name, setName] = useState({
 		error: "",
 		value: "",
@@ -25,36 +25,29 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
 		error: "",
 	})
 	const [isLoadingUpLoad, setIsLoadingUpLoad] = useState(false)
-
 	const fileRef = useRef()
 	const chooseFile = () => {
 		fileRef.current.click()
 	}
 	const onChangeFile = async (event) => {
 		let fileTemp = event.target.files[0]
-
 		if (fileTemp) {
 			if (
-				fileTemp.type == "image/png" ||
-				fileTemp.type == "image/jpeg" ||
-				fileTemp.type == "image/jpg"
+				fileTemp.type === "image/png" ||
+				fileTemp.type === "image/jpeg" ||
+				fileTemp.type === "image/jpg"
 			) {
-				console.log(fileTemp)
 				try {
 					let imageData = await upLoadImg(fileTemp)
-                    setImage({
-                        ...image,
-                        value : imageData.data.message
-                    })
+					setImage({ ...image, value: imageData.data.message })
 				} catch (error) {
-                    console.log(error)
-					message.error("Không thể tải ảnh lên")
+					message.error(" Không thể tải ảnh lên")
 				}
 			} else {
-				message.error("Chỉ được chọn định dạng hình PNG, JPEG, JPG")
+				message.error(" Chỉ được chịn định dạng hình PNG, JPEG, JPG")
 			}
 		} else {
-			message.error("Có lỗi xảy ra khi chọn File, vui lòng thử lại")
+			message.error("Có lỗi trong quá trình chọn File, vui lòng thử lại")
 		}
 	}
 	const onSubmit = async () => {
@@ -69,31 +62,30 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
 				error: "Vui lòng nhập đường dẫn",
 			})
 		} else if (!image.value) {
-			message.error("Vui lòng chọn ảnh tải lên")
+			message.error("Vui lòng tải ảnh lên")
 		}
 		try {
-			let brandData = await brandApi.postBrand(
-                image.value,
-                name.value,
-                true,
-                "/"+slug.value
-            )
-            message.success("Thêm thành công")
-            refeshData();
-            handleCancel();
+			// let brandData = await brandApi.updateBrand(
+			// 	image.value,
+			// 	name.value,
+			// 	true,
+			// 	"/" + slug.value
+			// )
+			message.success("Cập nhật thương hiệu thành công")
+			// refeshData()
+			// handleCancel()
 		} catch (error) {
-			message.error("Không thêm thương hiệu được", error)
+			message.error("Cập nhật không thành công")
 		}
 	}
-
 	return (
 		<Modal
-			title="Thêm thương hiệu"
+			title="Cập nhật thương hiệu"
 			visible={isModalVisible}
 			onOk={onSubmit}
 			onCancel={handleCancel}
 			cancelText="Hủy"
-			okText="Thêm"
+			okText="Sửa"
 		>
 			<Row>
 				<Col>
@@ -153,7 +145,7 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
 					/>
 				</Form.Item>
 
-				<input
+				<Input
 					id="myInput"
 					type="file"
 					ref={fileRef}
@@ -165,4 +157,4 @@ function PopUpAdd({ isModalVisible, handleOk, handleCancel, refeshData }) {
 	)
 }
 
-export default PopUpAdd
+export default PopUpEdit
