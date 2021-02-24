@@ -11,6 +11,7 @@ import {
 	message,
 	Popconfirm,
 	Pagination,
+	Switch,
 } from "antd"
 import {
 	DeleteOutlined,
@@ -21,25 +22,22 @@ import userApi from "../../apis/user"
 import PopUpAdd from "../../layouts/Main/components/PopUpAdd"
 import PopUpEdit from "../../layouts/Main/components/PopUpEdit"
 import { render } from "@testing-library/react"
+import ModalChangePassword from "../../layouts/Main/components/ModalChangePassword"
 
 const { Search } = Input
 
 const UserPage = () => {
 	const [listUsers, setListUsers] = useState([])
-	const [listUserOrigin, setListUserOrigin] = useState([])
+	const [currentUser, setCurrentUser] = useState([])
 	const [isVisible, setIsVisible] = useState(false)
-	const [isVisibleModalEdit, setIsVisibleModalEdit] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [page, setPage] = useState(1)
 	const [totalItems, setTotalItems] = useState(0)
-	// const [brandItem, setBrandItem] = useState({
-	// 	id: 0,
-	// 	brandName: "",
-	// 	slug: "",
-	// 	brandImage: "",
-	// 	published: false,
-	// })
-
+	const [userItem, setUserItem] = useState({
+		currentPassword: "",
+		newPassword: "",
+	})
+	const [active, setActive] = useState("")
 	useEffect(() => {
 		getAllUserData()
 	}, [page])
@@ -47,16 +45,16 @@ const UserPage = () => {
 	// const handleDelete = (key) => {
 	// 	setListUsers(listUsers.filter((item) => item.id !== key))
 	// }
-	// const handleUpdate = (item) => {
-	// 	setIsVisibleModalEdit(true)
-	// 	setBrandItem({
-	// 		id: item.id,
-	// 		brandName: item.brandName,
-	// 		slug: item.slug,
-	// 		brandImage: item.brandImage,
-	// 		published: item.published,
-	// 	})
-	// }
+	const handleChangePassword = async (item) => {
+		setIsVisible(true)
+
+		// setCurrentUser({
+		// 	...currentUser,
+		// 	id: item.id,
+		// 	currentPassword: item.currentPassword,
+		// 	newPassword: item.newPassword,
+		// })
+	}
 	const columns = [
 		{
 			title: "id",
@@ -99,6 +97,14 @@ const UserPage = () => {
 			title: "Trạng thái",
 			dataIndex: "status",
 			key: "status",
+			render: (_, record) => (
+				<Switch
+					unCheckedChildren="khóa"
+					checkedChildren="Mở"
+					checked={record.status}
+					onChange={() => changeActiveUser(record)}
+				/>
+			),
 		},
 		{
 			title: "Ảnh đại diện",
@@ -117,7 +123,7 @@ const UserPage = () => {
 			key: "event",
 			render: (_, record) => {
 				console.log(
-					"🚀 ~ file: index.js ~ line 82 ~ BrandPage ~ record",
+					"🚀 ~ file: index.js ~ line 119 ~ UserPage ~ record",
 					record
 				)
 				return (
@@ -125,20 +131,9 @@ const UserPage = () => {
 						<Col xs={9}>
 							<Button
 								type="primary"
-								// onClick={() => handleUpdate(record)}
+								onClick={() => handleChangePassword(record)}
 								icon={<EditOutlined />}
 							></Button>
-						</Col>
-						<Col xs={9}>
-							<Popconfirm
-								title="Bạn có muốn xóa thương hiệu ?"
-								// onConfirm={() => deleteBrandData(record.id)}
-							>
-								<Button
-									type="danger"
-									icon={<DeleteOutlined />}
-								></Button>
-							</Popconfirm>
 						</Col>
 					</Row>
 				)
@@ -149,15 +144,14 @@ const UserPage = () => {
 	const showModal = () => {
 		setIsVisible(true)
 	}
-	const showModalEdit = (id) => {
-		setIsVisibleModalEdit(true)
-	}
 	const hideModal = () => {
 		setIsVisible(false)
-		setIsVisibleModalEdit(false)
 	}
 	// const addBrand = () => {}
 	// const editBrand = () => {}
+	useEffect(() => {
+		getCurrentUser()
+	}, [])
 	useEffect(() => {
 		getAllUserData()
 	}, [])
@@ -166,35 +160,38 @@ const UserPage = () => {
 			setIsLoading(true)
 			const data = await userApi.getAllUsers(5, page - 1)
 			setListUsers(data.data.data)
-			setListUserOrigin(data.data.data)
 			setTotalItems(data.data.totalItems)
 			setIsLoading(false)
 		} catch (error) {
 			setIsLoading(false)
 		}
 	}
-	// const updateBrand = async (id) => {
-	// 	try {
-	// 		setIsLoading(true)
-	// 		await brandApi.updateBrand(id)
-	// 		handleUpdate(id)
-	// 		message.success("Cap nhat thanh cong")
-	// 	} catch (error) {
-	// 		message.error("Khong cap nhat thanh cong")
-	// 	}
-	// }
-	// const deleteBrandData = async (id) => {
-	// 	try {
-	// 		setIsLoading(true)
-	// 		await brandApi.deleteBrand(id)
-	// 		handleDelete(id)
-	// 		message.success("Xóa thành công")
-	// 		setIsLoading(false)
-	// 	} catch (error) {
-	// 		setIsLoading(false)
-	// 		message.error("Xóa thất bại, vui lòng thử lại")
-	// 	}
-	// }
+	const getCurrentUser = async () => {
+		try {
+			const userData = await userApi.getCurrentUser()
+			setCurrentUser(userData.data)
+		} catch (error) {
+			message.error("Error", error)
+		}
+	}
+	const changeActiveUser = async () => {
+		const userData = await userApi.getCurrentUser()
+		console.log("🚀 ~ file: index.js ~ line 187 ~ changeActiveUser ~ userData.data", userData.data)
+		// if (userData.data.status !== "ACTIVE") {
+		// 	setActive("ACTIVE")
+		// } else {
+		// 	setActive("UNACTIVE")
+		// }
+		// try {
+		// 	setIsLoading(true)
+		// 	let activeUser = await userData.changeActiveUser(active)
+		// 	// let updateInfoUser = await userData.updateUserInfo()
+		// 	message.success("Thay doi thanh cong")
+		// } catch (error) {
+		// 	message.error("Khong the thay doi trang thai")
+		// }
+	}
+
 	const searchItem = (keyWord) => {
 		// setListUsers(
 		// 	listUserOrigin.filter((item) => {
@@ -244,19 +241,12 @@ const UserPage = () => {
 					}}
 				/>
 			) : null}
-			<PopUpAdd
+			<ModalChangePassword
 				isModalVisible={isVisible}
-				// handleOk={addBrand}
 				handleCancel={hideModal}
 				refeshData={getAllUserData}
+				userItem={userItem}
 			/>
-			{/* <PopUpEdit
-				isModalVisible={isVisibleModalEdit}
-				// handleOk={editBrand}
-				handleCancel={hideModal}
-				refeshData={getAllUserData}
-				// brandItem={brandItem}
-			/> */}
 		</Card>
 	)
 }
