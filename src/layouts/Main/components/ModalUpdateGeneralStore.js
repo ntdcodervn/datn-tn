@@ -35,11 +35,11 @@ function ModalUpdateGeneralStore(
 	})
 
 	useEffect(() => {
-		setAddress({ ...address || "", value: storeItem.address })
-		setDescription({ ...description || "", value: storeItem.description })
-		setEmail({ ...email || "", value: storeItem.email })
-		setHotline({ ...hotline || "", value: storeItem.hotline })
-		setWorkingHour({ ...workingHour || "", value: storeItem.workingHour })
+		setAddress({ ...address || "", value: storeItem?.address })
+		setDescription({ ...description || "", value: storeItem?.description })
+		setEmail({ ...email || "", value: storeItem?.email })
+		setHotline({ ...hotline || "", value: storeItem?.hotline })
+		setWorkingHour({ ...workingHour || "", value: storeItem?.workingHour })
 	}, [storeItem])
 
 	const onSubmit = async () => {

@@ -17,7 +17,7 @@ const updateStoreInfo = async (
 	workingHour
 ) => {
 	try {
-		return await postTakenData("​/updateStoreInfo", {
+		return await postTakenData("/v1/​updateStoreInfo", {params:{
 			address,
 			createBy,
 			description,
@@ -25,7 +25,7 @@ const updateStoreInfo = async (
 			hotline,
 			updatedBy,
 			workingHour,
-		})
+		}})
 	} catch (error) {
 		throw error
 	}
